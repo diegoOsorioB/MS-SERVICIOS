@@ -21,7 +21,7 @@ public class JwtFilter extends OncePerRequestFilter  {
                                     FilterChain chain)
             throws ServletException, IOException {
 
-            String path = req.getPathInfo();
+            String path = req.getRequestURI();
             String method = req.getMethod();
 
             if (path.equals("/api/servicios") && method.equals("GET"))
