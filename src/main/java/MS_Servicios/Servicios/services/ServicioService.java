@@ -12,6 +12,7 @@ import MS_Servicios.Servicios.repository.ServicioRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
+import java.util.Arrays;
 import java.util.List;
 
 @Service
@@ -79,12 +80,11 @@ public class ServicioService {
         Servicio servicio = repository.findById(id)
                 .orElseThrow(() -> new Excepcion.ServicioNotFoundExcepcion(id));
 
-
-        InventarioDTO inventario = restTemplate.getForObject(
-                "http://localhost:8085/api/inventarios/" + servicio.getId_item(),
-                InventarioDTO.class
+        // Llamada al microservicio de inventarios para todos los productos del servicio
+        InventarioDTO[] inventarios = restTemplate.getForObject(
+                "http://localhost:8085/api/inventarios/servicio/" + servicio.getId_servicio(),
+                InventarioDTO[].class
         );
-
 
         ServicioResponse response = new ServicioResponse();
         response.setId_servicio(servicio.getId_servicio());
@@ -92,19 +92,16 @@ public class ServicioService {
         response.setPrecio_unitario(servicio.getPrecio_unitario());
         response.setDescripcion(servicio.getDescripcion());
 
-
         response.setCategoria(new CategoriaDTO() {{
             setId_categoria(servicio.getCategoria().getId_categoria());
             setNombre(servicio.getCategoria().getNombre());
             setStatus(servicio.getCategoria().getStatus());
         }});
 
-        response.setItem(inventario);
+        // Asignar todos los inventarios obtenidos
+        response.setItem(Arrays.asList(inventarios));
 
-       try{
-           return response;
-       }catch (DataAccessException ex){
-           throw new  Excepcion.DataBaseException("Ocurrio un error al obtener los datos "+ex.getMessage());
-       }
+        return response;
     }
+
 }

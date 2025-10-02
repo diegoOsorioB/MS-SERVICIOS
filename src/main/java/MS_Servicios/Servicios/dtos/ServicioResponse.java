@@ -2,6 +2,8 @@ package MS_Servicios.Servicios.dtos;
 
 import lombok.Data;
 
+import java.util.List;
+
 @Data
 public class ServicioResponse {
     private int id_servicio;
@@ -9,6 +11,6 @@ public class ServicioResponse {
     private double precio_unitario;
     private String descripcion;
     private CategoriaDTO categoria;
-    private InventarioDTO item;
+    private List<InventarioDTO> item;
 
 }
