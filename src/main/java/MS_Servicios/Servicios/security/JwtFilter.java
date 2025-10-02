@@ -24,10 +24,7 @@ public class JwtFilter extends OncePerRequestFilter  {
             String path = req.getPathInfo();
             String method = req.getMethod();
 
-            if (path.equals("/api/servicios") && method.equals("GET"))
-            {
-                chain.doFilter(req, res);
-            }
+
 
 
 
