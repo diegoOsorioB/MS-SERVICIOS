@@ -21,6 +21,15 @@ public class JwtFilter extends OncePerRequestFilter  {
                                     FilterChain chain)
             throws ServletException, IOException {
 
+            String path = req.getPathInfo();
+            String method = req.getMethod();
+
+            if (path.equals("/api/servicios") && method.equals("GET"))
+            {
+                chain.doFilter(req, res);
+            }
+
+
 
         String token = req.getHeader("Authorization");
         if (token != null && token.startsWith("Bearer ")) {
